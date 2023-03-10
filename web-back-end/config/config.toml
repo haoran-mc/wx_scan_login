@@ -1,0 +1,11 @@
+port = "8080"
+
+postgres.dsn = "host=127.0.0.1 port=5432 user=postgres dbname=postgres password=haoran232 sslmode=disable"
+
+logger.level = "info"     # debug info warn error dpanic panic fatal
+
+session.name = "wx-login"
+session.path = "" # os.TempDir() if ""
+session.secret = "123456"
+
+applet.url = "xxx.com/xxx"
