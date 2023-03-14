@@ -11,7 +11,6 @@ import (
 )
 
 const (
-	// session 中存的东西
 	userKey = "user" // model.Users，用户信息
 )
 

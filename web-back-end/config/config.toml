@@ -9,3 +9,6 @@ session.path = "" # os.TempDir() if ""
 session.secret = "123456"
 
 applet.url = "xxx.com/xxx"
+applet.code2sessionKeyUrl = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code"
+applet.id = ""
+applet.secret = ""

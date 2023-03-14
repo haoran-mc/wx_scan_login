@@ -19,7 +19,10 @@ type (
 			Secret string
 		}
 		Applet struct {
-			Url string
+			Url                string
+			Code2sessionKeyUrl string
+			Id                 string
+			Secret             string
 		}
 	}
 )
