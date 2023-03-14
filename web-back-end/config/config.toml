@@ -1,6 +1,10 @@
+address = "xxx.com"
 port = "8080"
 
-postgres.dsn = "host=127.0.0.1 port=5432 user=postgres dbname=postgres password=haoran232 sslmode=disable"
+mysql.dsn = "%s:%s@tcp(127.0.0.1:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local"
+mysql.user = "root"
+mysql.pass = "haoran232"
+mysql.dbname = "wx_login"
 
 logger.level = "info"     # debug info warn error dpanic panic fatal
 
