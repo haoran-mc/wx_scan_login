@@ -18,7 +18,7 @@ type WxSessionKey struct {
 
 // 封装手机号信息数据
 type WxPhone struct {
-	PhoneNumber     string `json:"phoneNumber"`
-	PurePhoneNumber string `json:"purePhoneNumber"`
-	CountryCode     string `json:"countryCode"`
+	PhoneNumber     string `json:"phone_number"`
+	PurePhoneNumber string `json:"pure_phone_number"`
+	CountryCode     string `json:"country_code"`
 }

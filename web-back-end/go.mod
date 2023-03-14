@@ -6,6 +6,7 @@ require (
 	github.com/BurntSushi/toml v1.2.1
 	github.com/gin-gonic/gin v1.9.0
 	github.com/gorilla/sessions v1.2.1
+	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	go.uber.org/zap v1.24.0
 	gorm.io/driver/postgres v1.4.8
 	gorm.io/gorm v1.24.5

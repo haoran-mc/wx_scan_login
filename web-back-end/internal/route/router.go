@@ -12,7 +12,10 @@ func Register(engine *gin.Engine) {
 	// 已扫描，更改 web 状态，等待小程序确认
 	engine.PUT("/change_status", app.Auth.ChangeStatus)
 
-	// 从小程序方获取 code
+	// 浏览器重复检查后端状态
+	engine.GET("/check_status", app.Auth.CheckStatus)
+
+	// 小程序确定登录
 	engine.POST("/login", app.Auth.Login)
 
 	engine.Use(visitor)

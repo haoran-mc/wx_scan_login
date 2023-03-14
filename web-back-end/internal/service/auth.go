@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/haoran-mc/wx_scan_login/web-back-end/internal/entity"
@@ -11,6 +13,7 @@ import (
 	"github.com/haoran-mc/wx_scan_login/web-back-end/pkg/config"
 	"github.com/haoran-mc/wx_scan_login/web-back-end/pkg/logger"
 	"github.com/haoran-mc/wx_scan_login/web-back-end/pkg/utils"
+	qrcode "github.com/skip2/go-qrcode"
 	"go.uber.org/zap"
 )
 
@@ -23,10 +26,28 @@ func AuthService(ctx *gin.Context) *sAuth {
 }
 
 func (s *sAuth) GenerateQRCode() (string, error) {
-	return "", nil
+	filename := "./assets/" + fmt.Sprintf("%d", time.Now().UnixMilli()) + ".png"
+	err := qrcode.WriteFile(
+		config.Conf.Applet.Url,
+		qrcode.Medium, 256, filename,
+	)
+	if err != nil {
+		return "", err
+	}
+	qraddr := config.Conf.Address + ":" + config.Conf.Port + "/assets/" + filename
+	return qraddr, nil
 }
 
-func (s *sAuth) ChangeStatus(status string) error {
+func (s *sAuth) ChangeStatus(ctx *gin.Context, status string) error {
+	cookie_status := &http.Cookie{
+		Name:     "x-dl-status",
+		Value:    status,
+		MaxAge:   300,
+		Secure:   true,
+		HttpOnly: true,
+		Expires:  time.Now().Add(time.Duration(300) * time.Second),
+	}
+	http.SetCookie(ctx.Writer, cookie_status)
 	return nil
 }
 

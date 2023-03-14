@@ -5,13 +5,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/sessions"
+	"github.com/haoran-mc/wx_scan_login/web-back-end/internal/consts"
 	"github.com/haoran-mc/wx_scan_login/web-back-end/internal/model"
 	"github.com/haoran-mc/wx_scan_login/web-back-end/pkg/db"
 	login_session "github.com/haoran-mc/wx_scan_login/web-back-end/pkg/sessions"
-)
-
-const (
-	userKey = "user" // model.Users，用户信息
 )
 
 type BaseContext struct {
@@ -30,14 +27,14 @@ func Context(ctx *gin.Context) *BaseContext {
 // SetAuth 设置授权
 func (c *BaseContext) SetAuth(users model.Users) {
 	s, _ := json.Marshal(users)
-	c.Session.Values[userKey] = string(s)
+	c.Session.Values[consts.UserSessionKey] = string(s)
 	_ = c.Session.Save(c.Ctx.Request, c.Ctx.Writer)
 }
 
 // Auth 获取授权
 func (c *BaseContext) Auth() *model.Users {
 	var user *model.Users
-	str := c.Session.Values[userKey]
+	str := c.Session.Values[consts.UserSessionKey]
 	if str == nil {
 		return user
 	}
@@ -66,6 +63,6 @@ func (c *BaseContext) Check() bool {
 
 // Forget 清除授权
 func (c *BaseContext) Forget() {
-	delete(c.Session.Values, userKey)
+	delete(c.Session.Values, consts.UserSessionKey)
 	_ = c.Session.Save(c.Ctx.Request, c.Ctx.Writer)
 }
