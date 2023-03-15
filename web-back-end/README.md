@@ -9,7 +9,7 @@ go run cmd/login.go
 ## 目录结构
 
 ```
-.
+. (web-back-end)
 ├── assets ········· 资源文件
 ├── cmd ············ 项目主干
 ├── config ········· 配置文件
