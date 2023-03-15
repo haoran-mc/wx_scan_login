@@ -3,7 +3,7 @@ package db
 import (
 	"fmt"
 
-	"github.com/haoran-mc/wx_scan_login/web-back-end/internal/model"
+	"github.com/haoran-mc/wx_scan_login/web-back-end/internal/models"
 	"github.com/haoran-mc/wx_scan_login/web-back-end/pkg/config"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -18,7 +18,7 @@ func DB() *gorm.DB {
 
 func syncDB() {
 	_ = gormDB.AutoMigrate(
-		&model.Users{},
+		&models.Users{},
 	)
 }
 

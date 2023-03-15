@@ -10,7 +10,7 @@ import (
 // visitor 访问者
 func visitor(ctx *gin.Context) {
 	stx := service.Context(ctx)
-	if !stx.Check() {
+	if !stx.CheckAuth() {
 		stx.Ctx.Redirect(http.StatusFound, "/qrcode")
 		ctx.Abort()
 	} else {

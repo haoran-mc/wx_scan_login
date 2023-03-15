@@ -7,7 +7,7 @@ import (
 )
 
 func AesDecrypt(encryptedData, sessionKey, iv string) ([]byte, error) {
-	//Base64解码
+	// Base64 解码
 	keyBytes, err := base64.StdEncoding.DecodeString(sessionKey)
 	if err != nil {
 		return nil, err
@@ -21,17 +21,13 @@ func AesDecrypt(encryptedData, sessionKey, iv string) ([]byte, error) {
 		return nil, err
 	}
 	origData := make([]byte, len(cryptData))
-	//AES
-	block, err := aes.NewCipher(keyBytes)
+	block, err := aes.NewCipher(keyBytes) // AES
 	if err != nil {
 		return nil, err
 	}
-	//CBC
-	mode := cipher.NewCBCDecrypter(block, ivBytes)
-	//解密
-	mode.CryptBlocks(origData, cryptData)
-	//去除填充位
-	origData = PKCS7UnPadding(origData)
+	mode := cipher.NewCBCDecrypter(block, ivBytes) // CBC
+	mode.CryptBlocks(origData, cryptData)          // 解密
+	origData = PKCS7UnPadding(origData)            // 去除填充位
 	return origData, nil
 }
 

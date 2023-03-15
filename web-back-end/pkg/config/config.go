@@ -6,27 +6,34 @@ import (
 
 type (
 	config struct {
-		Address string `toml:"address"`
-		Port    string `toml:"port"`
+		Address string
+		Port    string
 		Mysql   struct {
-			Dsn    string `toml:"dsn"`
-			User   string `toml:"user"`
-			Pass   string `toml:"pass"`
-			Dbname string `toml:"dbname"`
+			Dsn    string
+			User   string
+			Pass   string
+			Dbname string
 		}
 		Logger struct {
-			Level string `toml:"level"`
+			Level string
 		}
 		Session struct {
-			Name   string `toml:"name"`
-			Path   string `toml:"path"`
-			Secret string `toml:"secret"`
+			Name   string
+			Path   string
+			Secret string
 		}
 		Applet struct {
-			Url                string `toml:"url"`
-			Code2sessionKeyUrl string `toml:"code2sessionKeyUrl"`
-			Id                 string `toml:"id"`
-			Secret             string `toml:"secret"`
+			Url                string
+			Port               string
+			Code2sessionKeyUrl string
+			Id                 string
+			Secret             string
+		}
+		Web struct {
+			Router struct {
+				Scanned string
+				Welcome string
+			}
 		}
 	}
 )

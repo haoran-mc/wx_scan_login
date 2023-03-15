@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/sessions"
 	"github.com/haoran-mc/wx_scan_login/web-back-end/internal/consts"
-	"github.com/haoran-mc/wx_scan_login/web-back-end/internal/model"
+	"github.com/haoran-mc/wx_scan_login/web-back-end/internal/models"
 	"github.com/haoran-mc/wx_scan_login/web-back-end/pkg/db"
 	login_session "github.com/haoran-mc/wx_scan_login/web-back-end/pkg/sessions"
 )
@@ -25,16 +25,16 @@ func Context(ctx *gin.Context) *BaseContext {
 }
 
 // SetAuth 设置授权
-func (c *BaseContext) SetAuth(users model.Users) {
+func (c *BaseContext) SetAuth(users models.Users) {
 	s, _ := json.Marshal(users)
-	c.Session.Values[consts.UserSessionKey] = string(s)
+	c.Session.Values[consts.SessionKeyUser] = string(s)
 	_ = c.Session.Save(c.Ctx.Request, c.Ctx.Writer)
 }
 
 // Auth 获取授权
-func (c *BaseContext) Auth() *model.Users {
-	var user *model.Users
-	str := c.Session.Values[consts.UserSessionKey]
+func (c *BaseContext) Auth() *models.Users {
+	var user *models.Users
+	str := c.Session.Values[consts.SessionKeyUser]
 	if str == nil {
 		return user
 	}
@@ -44,15 +44,15 @@ func (c *BaseContext) Auth() *model.Users {
 	return user
 }
 
-// Refresh 刷新授权
-func (c *BaseContext) Refresh() {
-	var user model.Users
-	db.DB().Model(&model.Users{}).Where("id", c.Auth().ID).Find(&user)
+// RefreshAuth 刷新授权
+func (c *BaseContext) RefreshAuth() {
+	var user models.Users
+	db.DB().Model(&models.Users{}).Where("id", c.Auth().ID).Find(&user)
 	c.SetAuth(user)
 }
 
-// Check 检查授权
-func (c *BaseContext) Check() bool {
+// CheckAuth 检查授权
+func (c *BaseContext) CheckAuth() bool {
 	user := c.Auth()
 	if user == nil {
 		return false
@@ -61,8 +61,8 @@ func (c *BaseContext) Check() bool {
 	}
 }
 
-// Forget 清除授权
-func (c *BaseContext) Forget() {
-	delete(c.Session.Values, consts.UserSessionKey)
+// ForgetAuth 清除授权
+func (c *BaseContext) ForgetAuth() {
+	delete(c.Session.Values, consts.SessionKeyUser)
 	_ = c.Session.Save(c.Ctx.Request, c.Ctx.Writer)
 }

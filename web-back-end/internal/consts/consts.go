@@ -1,10 +1,10 @@
 package consts
 
 // status
-const UnscannedStatus string = "1"
-const ScannedStatus string = "2"
-const LoginedStatus string = "3"
+const StatusUnscanned string = "1"
+const StatusScanned string = "2"
+const StatusLogined string = "3"
 
 // session
-const StatusSessionKey string = "x-dl-status"
-const UserSessionKey string = "user"
+const SessionKeyStatus string = "x-dl-status"
+const SessionKeyUser string = "user"

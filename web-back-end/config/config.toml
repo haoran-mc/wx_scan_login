@@ -1,5 +1,5 @@
-address = "xxx.com"
-port = "8080"
+address = "127.0.0.1"
+port = "8079"
 
 mysql.dsn = "%s:%s@tcp(127.0.0.1:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local"
 mysql.user = "root"
@@ -9,10 +9,15 @@ mysql.dbname = "wx_login"
 logger.level = "info"     # debug info warn error dpanic panic fatal
 
 session.name = "wx-login"
-session.path = "" # os.TempDir() if ""
+session.path = "" # os.TempDir()
 session.secret = "123456"
 
-applet.url = "xxx.com/xxx"
+applet.url = "127.0.0.1"
+applet.port = "8090"
 applet.id = ""
 applet.secret = ""
 applet.code2sessionKeyUrl = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code"
+
+web.router.scanned = "/scanned"
+web.router.welcome = "/welcome"
+

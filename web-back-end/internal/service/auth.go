@@ -4,13 +4,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/haoran-mc/wx_scan_login/web-back-end/internal/consts"
 	"github.com/haoran-mc/wx_scan_login/web-back-end/internal/entity"
-	"github.com/haoran-mc/wx_scan_login/web-back-end/internal/model"
+	"github.com/haoran-mc/wx_scan_login/web-back-end/internal/models"
 	"github.com/haoran-mc/wx_scan_login/web-back-end/pkg/config"
+	"github.com/haoran-mc/wx_scan_login/web-back-end/pkg/db"
 	"github.com/haoran-mc/wx_scan_login/web-back-end/pkg/logger"
 	"github.com/haoran-mc/wx_scan_login/web-back-end/pkg/utils"
 	qrcode "github.com/skip2/go-qrcode"
@@ -28,26 +29,20 @@ func AuthService(ctx *gin.Context) *sAuth {
 func (s *sAuth) GenerateQRCode() (string, error) {
 	filename := "./assets/" + fmt.Sprintf("%d", time.Now().UnixMilli()) + ".png"
 	err := qrcode.WriteFile(
-		config.Conf.Applet.Url,
+		config.Conf.Applet.Url+":"+config.Conf.Applet.Port,
 		qrcode.Medium, 256, filename,
 	)
 	if err != nil {
 		return "", err
 	}
 	qraddr := config.Conf.Address + ":" + config.Conf.Port + "/assets/" + filename
+	logger.Logger.Info("QR code", zap.String("address: ", qraddr))
 	return qraddr, nil
 }
 
-func (s *sAuth) ChangeStatus(ctx *gin.Context, status string) error {
-	cookie_status := &http.Cookie{
-		Name:     "x-dl-status",
-		Value:    status,
-		MaxAge:   300,
-		Secure:   true,
-		HttpOnly: true,
-		Expires:  time.Now().Add(time.Duration(300) * time.Second),
-	}
-	http.SetCookie(ctx.Writer, cookie_status)
+func (s *sAuth) ChangeStatus(status string) error {
+	s.stx.Session.Values[consts.SessionKeyStatus] = status
+	s.stx.Session.Save(s.stx.Ctx.Request, s.stx.Ctx.Writer)
 	return nil
 }
 
@@ -73,7 +68,8 @@ func (s *sAuth) Code2SessionKey(code string) (entity.WxSessionKey, error) {
 	return wxSessionKey, nil
 }
 
-func (s *sAuth) DecryptPhoneData(encryptedData, sessionKey, iv string) (string, error) {
+func (s *sAuth) DecryptPhoneData(
+	encryptedData, sessionKey, iv string) (string, error) {
 	decrypt, err := utils.AesDecrypt(encryptedData, sessionKey, iv)
 	if err != nil {
 		logger.Logger.Error("failed to decrypt", zap.Error(err))
@@ -89,7 +85,9 @@ func (s *sAuth) DecryptPhoneData(encryptedData, sessionKey, iv string) (string, 
 	return phone, nil
 }
 
-func (s *sAuth) GetUserInfo(phoneNumber string) (model.Users, error) {
-	user := model.Users{}
-	return user, nil
+func (s *sAuth) GetUserInfo(phoneNumber string) (models.Users, error) {
+	user := models.Users{}
+	err := db.DB().Model(models.Users{}).
+		Where("phone = ?", phoneNumber).First(&user).Error
+	return user, err
 }
