@@ -58,7 +58,7 @@ func (c *auth) Scan(ctx *gin.Context) {
 }
 
 // 浏览器不断发送请求，查看后端 session 中的状态
-func (c *auth) CheckStatus(ctx *gin.Context) {
+func (c *auth) Sync(ctx *gin.Context) {
 	session := sessions.GetSession(ctx.Request)
 	backStatus := session.Values[consts.SessionKeyStatus] // session 中的状态
 	frontStatus, _ := ctx.Cookie(consts.SessionKeyStatus) // 浏览器的状态
